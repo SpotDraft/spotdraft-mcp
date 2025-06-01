@@ -9,6 +9,11 @@ import {
   getContractActivityLogTool,
 } from './contract/get_contract_activity_log.js';
 import {
+  GetContractApprovalsRequest,
+  getContractApprovals,
+  getContractApprovalsTool,
+} from './contract/get_contract_approvals.js';
+import {
   GetContractDownloadLinkRequest,
   getContractDownloadLink,
   getContractDownloadLinkTool,
@@ -85,6 +90,9 @@ async function main() {
         case getContractActivityLogTool.name:
           result = await getContractActivityLog(args as unknown as GetContractActivityLogRequest);
           break;
+        case getContractApprovalsTool.name:
+          result = await getContractApprovals(args as unknown as GetContractApprovalsRequest);
+          break;
         case getContractKeyPointersTool.name:
           result = await getContractKeyPointers(args as unknown as GetContractKeyPointersRequest);
           break;
@@ -140,6 +148,7 @@ async function main() {
         getContractDownloadLinkTool,
         getContractStatusTool,
         getContractActivityLogTool,
+        getContractApprovalsTool,
         getContractKeyPointersTool,
         getTemplatesTool,
         getTemplateDetailsTool,

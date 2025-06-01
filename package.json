@@ -1,6 +1,6 @@
 {
   "name": "@spotdraft/spotdraft-mcp",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Integrate the SpotDraft API into agentic workflows via MCP",
   "repository": {
     "type": "git",
