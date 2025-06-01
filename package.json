@@ -1,0 +1,39 @@
+{
+    "name": "@spotdraft/spotdraft-mcp",
+    "version": "0.0.1",
+    "description": "Integrate the SpotDraft API into agentic workflows via MCP",
+    "author": "SpotDraft",
+    "license": "MIT",
+    "type": "module",
+    "bin": {
+      "spotdraft-mcp-server": "./build/index.js"
+    },
+    "files": [
+      "build"
+    ],
+    "scripts": {
+      "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
+      "prepare": "npm run build",
+      "watch": "tsc --watch",
+      "inspector": "npx @modelcontextprotocol/inspector build/index.js"
+    },
+    "keywords": [
+      "mcp",
+      "spotdraft",
+      "agent",
+      "autonomous",
+      "ai",
+      "contract"
+    ],
+    "dependencies": {
+      "@modelcontextprotocol/sdk": "^1.6.0",
+      "axios": "^1.6.8",
+      "dotenv": "^16.4.5",
+      "mcp-framework": "^0.2.13",
+      "commander": "^12.0.0"
+    },
+    "devDependencies": {
+      "@types/node": "^20.11.20",
+      "typescript": "^5.3.3"
+    }
+  }
