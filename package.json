@@ -1,13 +1,12 @@
 {
   "name": "@spotdraft/spotdraft-mcp",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Integrate the SpotDraft API into agentic workflows via MCP",
   "author": "SpotDraft",
   "license": "MIT",
   "type": "module",
-  "bin": {
-    "spotdraft-mcp-server": "./build/index.js"
-  },
+  "main": "build/index.js",
+  "bin": "./build/index.js",
   "files": [
     "build"
   ],
@@ -15,7 +14,8 @@
     "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
     "prepare": "husky",
     "watch": "tsc --watch",
-    "inspector": "npx @modelcontextprotocol/inspector build/index.js"
+    "inspector": "npx @modelcontextprotocol/inspector build/index.js",
+    "start": "node build/index.js"
   },
   "keywords": [
     "mcp",

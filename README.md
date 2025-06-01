@@ -54,10 +54,11 @@ To use this with Claude Desktop, add the following to your `claude_desktop_confi
   "mcpServers": {
     "spotdraft": {
       "command": "npx",
-      "args": ["-y", "@spotdraft/spotdraft-mcp"],
+      "args": ["@spotdraft/spotdraft-mcp"],
       "env": {
         "SPOTDRAFT_CLIENT_ID": "<YOUR_CLIENT_ID>",
-        "SPOTDRAFT_CLIENT_SECRET": "<YOUR_CLIENT_SECRET>"
+        "SPOTDRAFT_CLIENT_SECRET": "<YOUR_CLIENT_SECRET>",
+        "SPOTDRAFT_BASE_URL": "<SPOTDRAFT_BASE_URL>" (optional)
       }
     }
   }

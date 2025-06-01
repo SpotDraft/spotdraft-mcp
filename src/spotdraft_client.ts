@@ -7,7 +7,7 @@ class SpotDraftClient {
   constructor(clientId: string, clientSecret: string, baseUrl?: string) {
     this.clientId = clientId;
     this.clientSecret = clientSecret;
-    this.baseUrl = baseUrl !== undefined ? baseUrl : 'https://api.in.spotdraft.com/api';
+    this.baseUrl = baseUrl !== undefined ? baseUrl : 'https://api.spotdraft.com/api';
 
     this.headers = {
       'Client-ID': this.clientId,
