@@ -27,6 +27,14 @@ import { GetContractListRequest, getContractList, getContractListTool } from './
 import { GetContractStatusRequest, getContractStatus, getContractStatusTool } from './contract/get_contract_status.js';
 
 import {
+  GetContractTypesRequest,
+  getContractTypes,
+  getContractTypesTool,
+} from './contract_types/get_contract_types.js';
+
+import { GetKeyPointersRequest, getKeyPointers, getKeyPointersTool } from './key_pointers/get_key_pointers.js';
+
+import {
   GetTemplateDetailsRequest,
   getTemplateDetails,
   getTemplateDetailsTool,
@@ -96,6 +104,9 @@ async function main() {
         case getContractKeyPointersTool.name:
           result = await getContractKeyPointers(args as unknown as GetContractKeyPointersRequest);
           break;
+        case getKeyPointersTool.name:
+          result = await getKeyPointers(args as unknown as GetKeyPointersRequest);
+          break;
         case getTemplatesTool.name:
           result = await getTemplates(args as unknown as GetTemplatesRequest);
           break;
@@ -110,6 +121,9 @@ async function main() {
           break;
         case getCounterPartyDetailsTool.name:
           result = await getCounterPartyDetails(args as unknown as GetCounterPartyDetailsRequest);
+          break;
+        case getContractTypesTool.name:
+          result = await getContractTypes(args as unknown as GetContractTypesRequest);
           break;
         default:
           throw new Error(`Unknown tool: ${name}`);
@@ -150,6 +164,8 @@ async function main() {
         getContractActivityLogTool,
         getContractApprovalsTool,
         getContractKeyPointersTool,
+        getKeyPointersTool,
+        getContractTypesTool,
         getTemplatesTool,
         getTemplateDetailsTool,
         getTemplateMetadataTool,

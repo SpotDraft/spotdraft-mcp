@@ -3,7 +3,37 @@ import spotdraftClient from '../spotdraft_client.js';
 
 const getContractListTool: Tool = {
   name: 'get_contract_list',
-  description: 'Retrieves a list of contracts from SpotDraft. Uses API v2.1.',
+  description: `Retrieves a list of contracts from SpotDraft. Uses API v2.1.
+The query parameters can be used to filter the contracts.
+
+Filters can be applied to the following in built fields:
+- client_email_address
+- client_name
+- created_at
+- expiring_at
+- last_updated_on
+
+All in built fields can be used with the following operators:
+- $eq (equal to)
+- $ne (not equal to)
+- $gt (greater than)
+- $gte (greater than or equal to)
+- $lt (less than)
+- $lte (less than or equal to)
+
+Following are some examples of query parameters applying the filters:
+- client_name[$eq]=John Doe
+- contract_kind[$ne]=UPLOAD_SIGN
+- contract_kind[$in]=TEMPLATE,UPLOAD_SIGN
+- expiring_at[$gt]=2025-06-07
+- expiring_at[$gte]=2025-06-07T00:00:00Z
+- expiring_at[$lt]=2025-06-07T00:00:00Z
+- expiring_at[$lte]=2025-06-07T00:00:00Z
+
+
+Filters can also be applied to the metadata fields as returned by the \`get_key_pointers\` tool. 
+- key_pointer_name[$eq]=Contract 1
+  `,
   inputSchema: {
     type: 'object',
     properties: {
@@ -17,13 +47,13 @@ const getContractListTool: Tool = {
         description: 'The number of items to return per page. Max 100.',
         default: 10,
       },
-      filter__client_email_address: {
-        type: 'string',
-        description: 'Filters on the counter party email. Does an exact match.',
+      filters: {
+        type: 'object',
+        description: 'Filters to apply to the contracts.',
       },
-      filter__client_name: {
-        type: 'string',
-        description: 'Filters on the counter party name. Does an exact match.',
+      metadataFilters: {
+        type: 'object',
+        description: 'Filters to apply to the metadata fields.',
       },
     },
   },
@@ -32,8 +62,8 @@ const getContractListTool: Tool = {
 interface GetContractListRequest {
   page?: number;
   limit?: number;
-  filter__client_email_address?: string;
-  filter__client_name?: string;
+  filters: {};
+  metadataFilters: {};
 }
 
 const getContractList = async (request: GetContractListRequest): Promise<any> => {
@@ -46,13 +76,17 @@ const getContractList = async (request: GetContractListRequest): Promise<any> =>
   if (request.limit) {
     params.append('limit', request.limit.toString());
   }
-  if (request.filter__client_email_address) {
-    params.append('filter__client_email_address', request.filter__client_email_address);
+  if (request.filters) {
+    Object.entries(request.filters).forEach(([key, value]) => {
+      params.append(`filter__${key}`, value as string);
+    });
   }
-  if (request.filter__client_name) {
-    params.append('filter__client_name', request.filter__client_name);
+  if (request.metadataFilters) {
+    Object.entries(request.metadataFilters).forEach(([key, value]) => {
+      params.append(`filter_metadata__${key}`, value as string);
+    });
   }
-
+  console.log('Making request to ', endpoint, params.toString());
   return spotdraftClient.get(endpoint, params);
 };
 
