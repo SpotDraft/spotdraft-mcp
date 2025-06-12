@@ -12,6 +12,7 @@ Filters can be applied to the following in built fields:
 - created_at
 - expiring_at
 - last_updated_on
+- contract_type_id - get contract types using get_contract_types tool
 
 All in built fields can be used with the following operators:
 - $eq (equal to)
@@ -30,9 +31,20 @@ Following are some examples of query parameters applying the filters:
 - expiring_at[$lt]=2025-06-07T00:00:00Z
 - expiring_at[$lte]=2025-06-07T00:00:00Z
 
-
 Filters can also be applied to the metadata fields as returned by the \`get_key_pointers\` tool. 
 - key_pointer_name[$eq]=Contract 1
+
+
+## Sorting (ALPHA)
+The query parameter \`sort\` can be used to sort the contracts.
+The parameter accepts a comma separated list of sort fields.
+The sort fields can be prefixed with \`-\` to sort in descending order.
+
+Following are some examples of query parameters applying the sorting:
+- sortFilters=in_built_field,+inbuild_filed
+- sortMetadataFilters=-key_pointer_name
+
+- means descending + means ascending
   `,
   inputSchema: {
     type: 'object',
@@ -55,6 +67,14 @@ Filters can also be applied to the metadata fields as returned by the \`get_key_
         type: 'object',
         description: 'Filters to apply to the metadata fields.',
       },
+      sortFilters: {
+        type: 'string',
+        description: 'Sort filters to apply to the contracts.',
+      },
+      sortMetadataFilters: {
+        type: 'string',
+        description: 'Sort filters to apply to the metadata fields.',
+      },
     },
   },
 };
@@ -64,6 +84,8 @@ interface GetContractListRequest {
   limit?: number;
   filters: {};
   metadataFilters: {};
+  sortFilters?: string;
+  sortMetadataFilters?: string;
 }
 
 const getContractList = async (request: GetContractListRequest): Promise<any> => {
@@ -86,7 +108,34 @@ const getContractList = async (request: GetContractListRequest): Promise<any> =>
       params.append(`filter_metadata__${key}`, value as string);
     });
   }
-  console.log('Making request to ', endpoint, params.toString());
+
+  let sortValue = '';
+  if (request.sortFilters) {
+    sortValue += request.sortFilters
+      .split(',')
+      .map((i) => {
+        if (i.startsWith('-') || i.startsWith('+')) {
+          return `${i.substring(0, 1)}filter__${i.slice(1)}`;
+        }
+        return `filter__${i}`;
+      })
+      .join(',');
+  }
+  if (request.sortMetadataFilters) {
+    sortValue += request.sortMetadataFilters
+      .split(',')
+      .map((i) => {
+        if (i.startsWith('-') || i.startsWith('+')) {
+          return `${i.substring(0, 1)}filter_metadata__${i.slice(1)}`;
+        }
+        return `filter_metadata__${i}`;
+      })
+      .join(',');
+  }
+  if (sortValue) {
+    params.append('sort', sortValue);
+  }
+  // console.log('Making request to ', endpoint, params.toString());
   return spotdraftClient.get(endpoint, params);
 };
 
